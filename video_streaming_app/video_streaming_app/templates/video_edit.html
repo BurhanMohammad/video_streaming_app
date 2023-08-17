@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Video</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include Video.js CSS -->
+    <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet">
+    <style>
+        /* Your custom styles here */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+        .video-js {
+            width: 100% !important;
+            height: auto !important;
+        }
+        .video-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Video</h1>
+    <div class="video-container">
+        <video id="video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" width="100%" height="auto">
+            <source src="{{ video.video_file.url }}" type="video/mp4">
+        </video>
+    </div>
+    <div class="video-title">{{ video.title }}</div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+
+    <!-- Include necessary scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://vjs.zencdn.net/7.14.3/video.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Initialize Video.js for the video element
+        videojs('video');
+
+        // Function to open video popup
+        function openVideoPopup(videoUrl) {
+            var videoPlayer = videojs('video-popup-player');
+            videoPlayer.src(videoUrl);
+            $('#videoPopup').modal('show');
+        }
+    </script>
+
+    <!-- Video Popup Modal -->
+    <div class="modal fade" id="videoPopup" tabindex="-1" role="dialog" aria-labelledby="videoPopupLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoPopupLabel">Video Popup</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="video-container">
+                        <video id="video-popup-player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" width="100%" height="auto">
+                            <!-- Video source will be set dynamically using JavaScript -->
+                        </video>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

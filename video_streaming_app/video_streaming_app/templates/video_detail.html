@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video List</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #video-list {
+            list-style: none;
+            padding: 0;
+        }
+        #video-list li {
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #video-list li .delete-button,
+        #video-list li .edit-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #video-list li .edit-button {
+            background-color: #007bff;
+            margin-right: 10px;
+        }
+        #video-list li .delete-button:hover,
+        #video-list li .edit-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1>Video List</h1>
+                <button class="btn btn-primary mb-3" onclick="getVideoList()">Get Video List</button>
+                <ul id="video-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function getVideoList() {
+            var authToken = localStorage.getItem('auth_token');
+            if (!authToken) {
+                alert('Authentication token not found. Please login.');
+                return;
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: '{% url "api-video-list" %}',
+                headers: {
+                    'Authorization': 'Token ' + authToken
+                },
+                success: function(response) {
+                    updateVideoList(response);
+                },
+                error: function(response) {
+                    console.error(response);
+                }
+            });
+        }
+
+        function updateVideoList(videos) {
+            var videoListElement = $('#video-list');
+            videoListElement.empty();
+
+            for (var i = 0; i < videos.length; i++) {
+                var video = videos[i];
+                var listItem = $('<li>').html(
+                    video.title +
+                    ' <button class="edit-button" onclick="openEditPage(' + video.id + ')">Edit</button>' +
+                    ' <button class="delete-button" onclick="openDeletePage(' + video.id + ')">Delete</button>'
+                );
+                videoListElement.append(listItem);
+            }
+        }
+
+        function openEditPage(videoId) {
+            window.location.href = '{% url "video-edit" 0 %}'.replace('0', videoId);
+        }
+
+        function openDeletePage(videoId) {
+            window.location.href = '{% url "video-delete" 0 %}'.replace('0', videoId);
+        }
+    </script>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

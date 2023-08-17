@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Documentation</title>
+</head>
+<body>
+    <h1>API Documentation</h1>
+
+    <h2>User Authentication</h2>
+    <h3>Login</h3>
+    <p>POST /api/login/</p>
+    <form method="post" action="/api/login/">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Login</button>
+    </form>
+
+    <h3>Logout</h3>
+    <p>POST /api/logout/</p>
+    <form method="post" action="/api/logout/">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+
+    <h3>Register User</h3>
+    <p>POST /api/register/</p>
+    <form method="post" action="/api/register/">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Register</button>
+    </form>
+
+    <h2>Videos</h2>
+    <h3>Get All Videos</h3>
+    <p>GET /api/videos/</p>
+
+    <h3>Create Video</h3>
+    <p>POST /api/videos/</p>
+    <form method="post" action="/api/videos/">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Title">
+        <input type="url" name="video_path" placeholder="Video URL">
+        <button type="submit">Create</button>
+    </form>
+
+    <!-- Similar sections for other video endpoints -->
+
+</body>
+</html>
