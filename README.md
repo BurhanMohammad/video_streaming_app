@@ -1,6 +1,6 @@
 # Project Documentation
 
-Welcome to the documentation for [Your Project Name]! This documentation provides a comprehensive overview of the project's functionality, features, and usage.
+Welcome to the documentation for Video Streaming App! This documentation provides a comprehensive overview of the project's functionality, features, and usage.
 
 ## Table of Contents
 
