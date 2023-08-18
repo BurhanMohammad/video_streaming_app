@@ -25,3 +25,11 @@ class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         fields = ['id', 'title', 'video_path']
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.video_path = validated_data.get('video_path', instance.video_path)
+        instance.save()
+        return instance
+
+

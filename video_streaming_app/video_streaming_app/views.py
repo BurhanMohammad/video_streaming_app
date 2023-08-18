@@ -18,6 +18,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.http import JsonResponse
+from rest_framework.permissions import IsAuthenticated
+
 
 
 import cv2
@@ -104,6 +106,8 @@ def video_delete(request, pk):
 
 
 
+
+
 class VideoStreamView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -129,17 +133,17 @@ class VideoStreamView(APIView):
             return Response({'message': 'Video not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class VideoListView(generics.ListCreateAPIView):
-    queryset = Video.objects.all()
-    serializer_class = VideoSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class VideoListView(generics.ListCreateAPIView):
+#     queryset = Video.objects.all()
+#     serializer_class = VideoSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        search_query = self.request.query_params.get('search', None)
-        if search_query:
-            queryset = queryset.filter(title__icontains=search_query)
-        return queryset
+#     def get_queryset(self):
+#         queryset = super().get_queryset()
+#         search_query = self.request.query_params.get('search', None)
+#         if search_query:
+#             queryset = queryset.filter(title__icontains=search_query)
+#         return queryset
     
 
 
@@ -161,15 +165,28 @@ def video_detail(request, pk):
 
 # API views
 class VideoListAPI(generics.ListCreateAPIView):
-    queryset = Video.objects.all()
     serializer_class = VideoSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        queryset = Video.objects.all()
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            queryset = queryset.filter(Q(title__icontains=search_query))
+        return queryset
 
 class VideoDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    # ... other methods ...
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 
